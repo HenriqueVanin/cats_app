@@ -1,9 +1,10 @@
-import { ReactNativeJoystick } from "@korsolutions/react-native-joystick";
+// import { ReactNativeJoystick } from "@korsolutions/react-native-joystick";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../components/CustomButton";
 import { Text, View } from "react-native";
 import useMQTT from "../components/MQTT";
 import { commandTopic } from "../components/MQTT/commands";
+import VideoFrame from "../components/VideoKinesis/video-player";
 
 const Control = () => {
   const { PublishMessage } = useMQTT();
@@ -12,7 +13,9 @@ const Control = () => {
   }
   return (
     <SafeAreaView className="flex-1 items-center bg-[#191C4A]">
-      <View className="h-[230px] bg-gray-200 m-6 rounded-lg w-[90%]"></View>
+      <View className="h-[230px] bg-gray-200 m-6 rounded-lg w-[90%]">
+        <VideoFrame />
+      </View>
       <View className="flex-1 w-full px-6">
         <CustomButton
           title="LASER ON"
@@ -54,7 +57,7 @@ const Control = () => {
         </View>
       </View>
       <View className="p-5">
-        <ReactNativeJoystick
+        {/* <ReactNativeJoystick
           color="#09C3B8"
           radius={75}
           onMove={(data) =>
@@ -63,7 +66,7 @@ const Control = () => {
               JSON.stringify(data)
             )
           }
-        />
+        /> */}
       </View>
     </SafeAreaView>
   );
