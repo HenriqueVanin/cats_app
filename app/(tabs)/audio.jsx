@@ -1,14 +1,13 @@
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AudioRow from "../components/AudioRow";
-import { TouchableHighlight } from "react-native-gesture-handler";
 import CustomButton from "../components/CustomButton";
 import { Audio as AudioDevice } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
 import useMQTT from "../components/MQTT";
 import { commandTopic } from "../components/MQTT/commands";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { AUDIO_DIR } from "../components/MQTT/settings";
 
 const Audio = () => {
   const [recording, setRecording] = useState(null);
@@ -73,7 +72,7 @@ const Audio = () => {
   async function playAudio(file, especificUri) {
     const playbackObject = new AudioDevice.Sound();
     await playbackObject.loadAsync({
-      uri: (especificUri ? especificUri : 'file:///data/user/0/com.hvanin2.app_cats/cache/Audio/' + file),
+      uri: (especificUri ? especificUri : AUDIO_DIR + file),
     });
     await playbackObject.playAsync();
   }
@@ -138,7 +137,7 @@ const Audio = () => {
   }
 
   const getAllFilePathsFromFolder = async () => {
-    const path = 'file:///data/user/0/com.hvanin2.app_cats/cache/Audio/';
+    const path = AUDIO_DIR;
     const list = await FileSystem.readDirectoryAsync(path);
     setAudioFiles(list);
   };
@@ -155,7 +154,7 @@ const Audio = () => {
   }
 
   async function handleDeleteAudio(file) {
-    FileSystem.deleteAsync('file:///data/user/0/com.hvanin2.app_cats/cache/Audio/' + file);
+    FileSystem.deleteAsync(AUDIO_DIR + file);
     getAllFilePathsFromFolder();
   }
 
