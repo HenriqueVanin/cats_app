@@ -10,7 +10,7 @@ export interface AlertStore {
     waterTemperature: string,
     waterLevelAlert: string,
     snacksLevelAlert: string,
-    alertTemperature: string,
+    temperatureAlert: string,
   };
   activities : Activity[],
   setAlertStatus: (a: any) => void;
@@ -22,7 +22,7 @@ export const useAlertStore = create<AlertStore>((set) => ({
     waterTemperature: "-",
     waterLevelAlert: "-",
     snacksLevelAlert: "-",
-    alertTemperature: ""
+    temperatureAlert: ""
   },
   activities: [],
   setActivities: (activities: Activity[]) => set(() => ({activities})),
