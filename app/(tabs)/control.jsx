@@ -7,7 +7,6 @@ import { commandTopic } from "../components/MQTT/commands";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import * as FileSystem from "expo-file-system";
-import { AUDIO_DIR } from "../components/MQTT/settings";
 // import VideoFrame from "../components/VideoKinesis/video-player";
 // import ViewerComponent from "../components/VideoKinesis/ViewerComponent";
 
@@ -32,6 +31,7 @@ const Control = () => {
     PublishMessage(topic, msg);
   }
 
+  const AUDIO_DIR = FileSystem.cacheDirectory + "/Audio/"
   const [audioOptions, setAudioOptions] = useState([]);
 
   const handlePress = useCallback(
@@ -130,7 +130,7 @@ const Control = () => {
         <Picker.Item key={'p3'} label="Predefined Audio 3" value="sound_3" />
         <Picker.Item key={'p4'} label="Predefined Audio 4" value="sound_4" />
         <Picker.Item key={'p5'} label="Predefined Audio 5" value="sound_5" />
-        {audioOptions?.map((sound, index) => <Picker.Item key={index} label={`Custom Audio ${index}`} value={sound} />)}
+        {audioOptions?.map((sound, index) => <Picker.Item key={index} label={`Custom Audio ${index + 1}`} value={sound} />)}
       </Picker>
       </View>
     </SafeAreaView>

@@ -7,7 +7,6 @@ import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
 import useMQTT from "../components/MQTT";
 import { commandTopic } from "../components/MQTT/commands";
-import { AUDIO_DIR } from "../components/MQTT/settings";
 
 const Audio = () => {
   const [recording, setRecording] = useState(null);
@@ -19,7 +18,7 @@ const Audio = () => {
     PublishMessage(topic, msg);
   }
   const [timeLeft, setTimeLeft] = useState(null);
-
+  const AUDIO_DIR = FileSystem.cacheDirectory + "/Audio/"
   useEffect(() => {
       if(timeLeft===0){
         setTimeLeft(null)
