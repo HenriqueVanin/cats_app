@@ -27,6 +27,7 @@ const throttle = (func, delay) => {
 
 const Control = () => {
   const { PublishMessage } = useMQTT();
+  const [count, setCount] = useState(0);
   const publishTopic = (topic, msg) => {
     PublishMessage(topic, msg);
   }
@@ -53,13 +54,11 @@ const Control = () => {
 
   function open() {
     pickerRef.current.focus();
+    setCount(count+1);
+    if(count > 10) setCount(0);
   }
-
-  function close() {
-    pickerRef.current.blur();
-  }
-
   useEffect(() => {getAllFilePathsFromFolder()}, []);
+  useEffect(() => {getAllFilePathsFromFolder()}, [count]);
 
   
   return (
