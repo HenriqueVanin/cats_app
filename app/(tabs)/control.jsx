@@ -1,24 +1,49 @@
-// import { ReactNativeJoystick } from "@korsolutions/react-native-joystick";
+import { ReactNativeJoystick } from "@korsolutions/react-native-joystick";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../components/CustomButton";
 import { Text, View } from "react-native";
 import useMQTT from "../components/MQTT";
 import { commandTopic } from "../components/MQTT/commands";
-import VideoFrame from "../components/VideoKinesis/video-player";
+import { useCallback } from "react";
+// import VideoFrame from "../components/VideoKinesis/video-player";
+// import ViewerComponent from "../components/VideoKinesis/ViewerComponent";
+
+const throttle = (func, delay) => {
+  let throttling = false;
+  
+  return (...args) => {
+    if (!throttling) {
+      throttling = true;
+      func(...args);
+      setTimeout(() => {
+        throttling = false;
+      }, delay);
+    }
+  };
+};
 
 const Control = () => {
   const { PublishMessage } = useMQTT();
   const publishTopic = (topic, msg) => {
     PublishMessage(topic, msg);
   }
+  const handlePress = useCallback(
+    throttle((pos, data) => {
+      publishTopic(
+        pos,
+        data
+      )
+    }, 1000),
+    []
+  );
   return (
     <SafeAreaView className="flex-1 items-center bg-[#191C4A]">
       <View className="h-[230px] bg-gray-200 m-6 rounded-lg w-[90%]">
-        <VideoFrame />
+        {/* <ViewerComponent /> */}
       </View>
       <View className="flex-1 w-full px-6">
         <CustomButton
-          title="LASER ON"
+          title="LASER ON/OFF"
           isLoading={false}
           containerStyles={"w-full bg-terciary h-12"}
           handlePress={() => publishTopic(
@@ -32,7 +57,7 @@ const Control = () => {
             isLoading={false}
             containerStyles={"w-[30%] bg-terciary h-12"}
             textStyles={"text-[12px]"}
-            handlePress={() => publishTopic(commandTopic.soundPlay, "someId")}
+            handlePress={() => console.log("Teste")}
           />
           <CustomButton
             title="THROW BALL"
@@ -56,17 +81,17 @@ const Control = () => {
           />
         </View>
       </View>
-      <View className="p-5">
-        {/* <ReactNativeJoystick
+      <View className="mb-10">
+        <ReactNativeJoystick
           color="#09C3B8"
-          radius={75}
+          radius={120}
           onMove={(data) =>
-            publishTopic(
+            handlePress(
               commandTopic.laserPosition,
               JSON.stringify(data)
             )
           }
-        /> */}
+        />
       </View>
     </SafeAreaView>
   );

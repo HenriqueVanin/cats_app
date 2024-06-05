@@ -1,6 +1,6 @@
 import * as SQLite from "expo-sqlite";
 
-export const db = SQLite.openDatabaseSync("database.sqlite");
+export const db = SQLite.openDatabase("database.sqlite");
 export const executeTransaction = (
   sql: string,
   values?: (string | number | null)[]

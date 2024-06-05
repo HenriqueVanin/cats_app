@@ -1,5 +1,6 @@
 import { Image, ImageBackground, Text, View } from "react-native";
 import { images } from "../../constants";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 const WaterStatus = ({ level, temperature }) => {
   return (

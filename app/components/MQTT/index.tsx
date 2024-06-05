@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0.
  */
 //import '../shim'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { mqtt5, auth, iot } from "aws-iot-device-sdk-v2";
 import { ReadableStream } from "web-streams-polyfill/ponyfill/es6";
 globalThis.ReadableStream = ReadableStream;
@@ -11,6 +11,7 @@ import { once } from "events";
 import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
 import { CognitoIdentityCredentials } from "@aws-sdk/credential-provider-cognito-identity/dist-types/fromCognitoIdentity";
 import { toUtf8 } from "@aws-sdk/util-utf8-browser";
+import Toast from 'react-native-toast-message';
 import { View, Button, Text } from "react-native";
 // @ts-ignore
 import {
@@ -137,12 +138,20 @@ function createClient(
 
 function useMQTT() {
   var client: mqtt5.Mqtt5Client;
-  var user_msg_count = 0;
+  const [count, setCount] = useState(0);
+  const [actual, setActual] = useState(0);
   const qos0Topic = "/teste";
   const alertStore = useAlertStore();
 
   const create = async (title: string, type: string) => {
     const date = String(Date.now());
+
+    Toast.show({
+      type: 'success',
+      text1: title,
+      text2: 'teste'
+    });
+  
     await repository.create({
       title: title,
       type: type,
@@ -173,7 +182,7 @@ function useMQTT() {
 
     await attemptingConnect;
     await connectionSuccess;
-
+    console.log("Deu bom");
     const suback = await client.subscribe({
       subscriptions: [{ qos: mqtt5.QoS.AtLeastOnce, topicFilter: qos0Topic }],
     });
@@ -219,6 +228,7 @@ function useMQTT() {
             let newStatus = alertStore.alertStatus;
             newStatus[eventTopic.replace("/","")] = tMsg;
             alertStore.setAlertStatus(newStatus);
+            setCount(count+1);
             create(alertTitle[eventTopic.replace("/","")] + tMsg,eventTopic.replace("/",""))
             updateAll();
           }
@@ -230,7 +240,8 @@ function useMQTT() {
   }
 
   async function PublishMessage(topicName: string, msg: string) {
-    const publishResult = await client
+    testSuccessfulConnection().then(async () => { 
+      const publishResult = await client
       .publish({
         qos: mqtt5.QoS.AtLeastOnce,
         topicName: topicName,
@@ -239,11 +250,13 @@ function useMQTT() {
         },
       })
       .then(() => {
+        console.log("Button Clicked, Publish result: " + JSON.stringify(publishResult));
         log("Button Clicked, Publish result: " + JSON.stringify(publishResult));
       })
       .catch((error) => {
         log(`Error publishing: ${error}`);
       });
+    });
   }
 
   useEffect(() => {

@@ -10,40 +10,52 @@ import {
 import { useState } from "react";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import useMQTT from "./MQTT";
 import { commandTopic } from "./MQTT/commands";
 // import { Picker } from "@react-native-picker/picker";
 
-const ScheduleRow = ({ title, icon, commandId }) => {
-  const [selectedRepeatTime, setSelectedRepeatTime] = useState();
+const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
   const [selectedTime, setSelectedTime] = useState();
+  const [selectedDate, setSelectedDate] = useState();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [scheduleTime, setScheduleTime] = useState([]);
-  const mqtt = useMQTT();
+  const [daily, setDaily] = useState(false);
+  
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
-  const handleConfirm = (date) => {
-    setSelectedTime(`${date.getHours()}:${date.getMinutes()}`);
+  const showTimePicker = () => {
+    setTimePickerVisibility(true);
+  };
+  const hideTimePicker = () => {
+    setTimePickerVisibility(false);
+  };
+  const handleDateConfirm = (date) => {
+    setSelectedDate(`${date.getDate()<10 ? "0" : ""}${date.getDate()}/${(date.getMonth()+1)<10 ? "0":""}${date.getMonth() + 1}`);
+    hideDatePicker();
+  };
+  const handleTimeConfirm = (time) => {
+    setSelectedTime(`${time.getHours() < 10 ? "0" : ""}${time.getHours()}:${time.getMinutes() < 10 ? "0" : ""}${time.getMinutes()}`);
     hideDatePicker();
   };
   const handleAddNewSchedule = () => {
     setScheduleTime([
       ...scheduleTime,
-      { id: scheduleTime.length + 1, time: selectedTime },
+      { id: scheduleTime.length + 1, time: selectedTime, date: selectedDate },
     ]);
-    mqtt.PublishMessage(
+    const date = daily ? "" :("#" + selectedDate.split("/")[0] + "#" + selectedDate.split("/")[1]) ;
+    publishTopic(
       commandTopic.setSchedule,
-      commandId + ":" + selectedTime.replaceAll(":", "")
+      commandId + "#" + selectedTime.replace(":", "") + date
     );
   };
   const handleDeleteSchedule = (id) => {
     let newArray = scheduleTime.filter((item) => item.id !== id);
     setScheduleTime(newArray);
-    mqtt.PublishMessage(
+    publishTopic(
       commandTopic.delSchedule,
       commandId +
         ":" +
@@ -58,35 +70,52 @@ const ScheduleRow = ({ title, icon, commandId }) => {
       <View className="flex-row justify-between items-center w-full py-4 px-6 pr-24">
         <View className="flex-row justify-start items-center w-full">
           <View className="rounded-lg w-10 h-10 items-center justify-center bg-terciary mr-3">
-            <Image
-              source={icon}
-              resizeMode="contain"
-              tintColor={"white"}
-              className="w-6 h-6"
-            />
+            {icon}
           </View>
           <Text className="font-bold text-white text-2xl">{title}</Text>
         </View>
-        <Switch />
+        {/* <Switch /> */}
       </View>
-      <View className="flex-row justify-start pl-6 gap-2">
-        <View className="w-[40%] rounded-lg bg-terciary">
+      <View className="flex-grid justify-start pl-6 gap-2">
+        <View className="w-[70%] rounded-lg flex flex-row">
           <TouchableOpacity
-            className="bg-terciary p-4 rounded rounded-md"
-            onPress={showDatePicker}
+            className="bg-terciary w-[50%] p-4 rounded rounded-md mr-1"
+            onPress={()=> showTimePicker()}
           >
             <Text className="text-[16px] text-white">
               {selectedTime ? String(selectedTime) : "SELECT TIME"}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-terciary w-[50%]  p-4 rounded rounded-md"
+            onPress={()=> showDatePicker()}
+          >
+            <Text className="text-[16px] text-white">
+              {selectedDate ? String(selectedDate) : "SELECT DATE"}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className={`${daily ? "bg-secondary" : "bg-terciary"} w-[30%] ml-1 p-4 rounded rounded-md`}
+            onPress={()=> setDaily(!daily)}
+          >
+            <Text className="text-[16px] text-white">
+              DAILY
+            </Text>
+          </TouchableOpacity>
           <DateTimePickerModal
             mode="time"
+            isVisible={isTimePickerVisible}
+            onCancel={hideTimePicker}
+            onConfirm={handleTimeConfirm}
+          />
+            <DateTimePickerModal
+            mode="date"
             isVisible={isDatePickerVisible}
+            onConfirm={handleDateConfirm}
             onCancel={hideDatePicker}
-            onConfirm={handleConfirm}
           />
         </View>
-        <View className="w-[40%] rounded-lg bg-terciary">
+        <View className="w-[93%] rounded-lg bg-terciary">
           {/* <Picker
             selectedValue={selectedRepeatTime}
             onValueChange={(itemValue, itemIndex) =>
@@ -98,28 +127,28 @@ const ScheduleRow = ({ title, icon, commandId }) => {
             <Picker.Item label="3x A DAY" value="js" />
           </Picker> */}
           <TouchableOpacity
-            className="bg-secondary p-4 rounded rounded-md"
+            className="bg-secondary p-3 rounded rounded-md justify-center flex-row"
             onPress={handleAddNewSchedule}
           >
             <Text className="text-[16px] font-bold text-white">
-              Add New Time
+              Add
             </Text>
           </TouchableOpacity>
         </View>
       </View>
-      <View className="grid gap-2 mt-2 ml-4">
+      <View className="grid w-[100%] gap-2 mt-2 ml-4">
         {scheduleTime?.map((item) => (
           <View
-            id={item.id}
-            className="p-3 bg-terciary mr-16 rounded-lg flex flex-row items-center justify-between"
+            key={item.id}
+            className="p-3 bg-terciary mr-8 rounded-lg flex flex-row items-center justify-between"
           >
             <Text className="text-[14px] text-white">
-              {title} - {item.time}
+              {title} - {item?.time} | Day {item?.date}
             </Text>
             <TouchableOpacity
               className="bg-primary p-2 rounded rounded-full w-9 items-center justify-center"
               onPress={() => {
-                handleDeleteSchedule(item.id);
+                handleDeleteSchedule(item?.id);
               }}
             >
               <Text className="text-[16px] font-bold text-red-200">-</Text>

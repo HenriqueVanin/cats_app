@@ -3,8 +3,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ScheduleRow from "../components/ScheduleRow";
 import { icons } from "../../constants";
 import { scheduleId } from "../components/MQTT/commands";
+import useMQTT from "../components/MQTT";
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Schedule = () => {
+  const { PublishMessage } = useMQTT();
+  const publishTopic = (topic, msg) => {
+    PublishMessage(topic, msg);
+  }
   return (
     <SafeAreaView className="flex-1 bg-[#191C4A]">
       <View className="flex-row items-start p-8 pb-2">
@@ -13,15 +20,17 @@ const Schedule = () => {
       <View className="items-center">
         <ScheduleRow
           title={"Ball Launcher"}
-          icon={icons.leftArrow}
+          icon={<MaterialCommunityIcons name="tennis-ball" color={'#fff'} size={25} />}
           commandId={scheduleId.snackDispenser}
+          publishTopic={publishTopic}
         />
       </View>
       <View className="items-center">
         <ScheduleRow
           title={"Snack Dispenser"}
-          icon={icons.plus}
+          icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />}
           commandId={scheduleId.snackDispenser}
+          publishTopic={publishTopic}
         />
       </View>
       {/* <View className="items-center">

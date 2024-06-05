@@ -16,7 +16,7 @@ export const commandTopic = {
 export const iconActivity = {
   waterTemperature: <MaterialCommunityIcons name="water-outline" color={'#40e0d0'} size={30} />,
   temperatureAlert: <MaterialCommunityIcons name="water-alert-outline" color={'#ff9302'} size={30} />,
-  waterLevelAlert:  <Icon name="water" color="#fff" size={20} />,
+  waterLevelAlert:  <Icon name="water" color="#fff" size={27} />,
   snacksLevelAlert: <MaterialCommunityIcons name="food-apple-outline" color={'#ff8456'} size={30} />,
 }
 

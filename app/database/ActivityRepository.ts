@@ -29,11 +29,10 @@ export default class ActivityRepository {
   }
 
   public async create(activities: Activity) {
-    const result = await executeTransaction(
+    await executeTransaction(
       "INSERT INTO activities (title, type, timeStamp) values (?, ?, ?);",
       [activities.title, activities.type, activities.timeStamp]
     );
-    return result.insertId;
   }
 
   public async all() {

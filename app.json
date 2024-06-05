@@ -36,7 +36,7 @@
     "plugins": [
       "expo-router",
       "expo-camera",
-      "expo-av"
+      "expo-asset"
     ],
     "extra": {
       "router": {

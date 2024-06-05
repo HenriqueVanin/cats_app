@@ -1,9 +1,11 @@
 import { Image, Text, TouchableHighlight, View } from "react-native";
 import { icons } from "../../constants";
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const SoundIcon = () => {
   return (
-    <View className="items-center justify-center gap-2">
+    <View className="items-center justify-center">
       <Image
         source={icons.play}
         resizeMode="contain"
@@ -14,38 +16,43 @@ const SoundIcon = () => {
   );
 };
 
+const DeleteIconDisabled = () => {
+  return (
+    <View className="items-center justify-center">
+      <MaterialCommunityIcons name="delete" color={"#23265A"} size={25} />
+    </View>
+  );
+};
 const DeleteIcon = () => {
   return (
-    <View className="items-center justify-center gap-2">
-      <Image
-        source={icons.DeleteIcon}
-        resizeMode="contain"
-        tintColor={"#fff"}
-        className="w-6 h-6"
-      />
+    <View className="items-center justify-center">
+      <MaterialCommunityIcons name="delete" color={"#880808"} size={25} />
     </View>
   );
 };
 
-const AudioRow = ({ title, excludable }) => {
+const AudioRow = ({ title, excludable = false, play, deleteAction, id}) => {
   return (
-    <View className="flex-row justify-center items-center">
+    <View className="flex-row justify-between items-center px-6">
       <View
-        className={`flex-row items-center pt-0 ${
-          excludable ? "w-[69%]" : "w-[75%]"
-        } justify-start bg-terciary rounded-xl px-5 my-1 py-3 mr-3`}
+        className={`flex-row items-center pt-0 w-[72%]
+        justify-start bg-terciary rounded-xl px-2 my-1 py-3 mr-3 h-12`}
       >
-        <SoundIcon />
-        <Text className="font-bold text-white ml-3">{title}</Text>
+        <Text className="font-bold text-white ml-3 pr-4">{title}</Text>
       </View>
-      {excludable && (
-        <TouchableHighlight>
-          <DeleteIcon />
-        </TouchableHighlight>
-      )}
-      <TouchableHighlight>
+      <TouchableHighlight className="w-10 h-10 rounded-full items-center flex flex-row justify-center" onPress={play}>
         <SoundIcon />
       </TouchableHighlight>
+      {excludable && 
+        <TouchableHighlight className="w-10 h-10 rounded-full items-center flex flex-row justify-center" onPress={()=>deleteAction(id)}>
+          <DeleteIcon />
+        </TouchableHighlight>
+      }
+      {!excludable && 
+        <TouchableHighlight disabled={true} className="w-10 h-10 rounded-full items-center flex flex-row justify-center">
+          <DeleteIconDisabled />
+        </TouchableHighlight>
+      }
     </View>
   );
 };

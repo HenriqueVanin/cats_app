@@ -6,12 +6,44 @@ import CustomButton from "../components/CustomButton";
 import { Audio as AudioDevice } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
+import useMQTT from "../components/MQTT";
+import { commandTopic } from "../components/MQTT/commands";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Audio = () => {
   const [recording, setRecording] = useState(null);
   const [recordingStatus, setRecordingStatus] = useState("idle");
   const [audioPermission, setAudioPermission] = useState(null);
-  const [audioOptions, setAudioOptions] = useState([]);
+  const [audioFiles, setAudioFiles] = useState([]);
+  const { PublishMessage } = useMQTT();
+  const publishTopic = (topic, msg) => {
+    PublishMessage(topic, msg);
+  }
+  const [timeLeft, setTimeLeft] = useState(null);
+
+  useEffect(() => {
+      if(timeLeft===0){
+        setTimeLeft(null)
+        if(recording)  handleRecordButtonPress();
+      }
+
+      // exit early when we reach 0
+      if (!timeLeft) return;
+
+      // save intervalId to clear the interval when the
+      // component re-renders
+      const intervalId = setInterval(() => {
+
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
+
+      // clear interval on re-render to avoid memory leaks
+      return () => clearInterval(intervalId);
+      // add timeLeft as a dependency to re-rerun the effect
+      // when we update it
+    }, [timeLeft]);
+  const [permissionResponse, requestPermission] = AudioDevice.usePermissions();
+
   useEffect(() => {
     // Simply get recording permission upon first render
     async function getPermission() {
@@ -24,7 +56,6 @@ const Audio = () => {
           console.log(error);
         });
     }
-
     // Call function to get permission
     getPermission();
     // Cleanup upon first render
@@ -35,71 +66,83 @@ const Audio = () => {
     };
   }, []);
 
-  async function startRecording() {
-    try {
-      // needed for IoS
-      if (audioPermission) {
-        await AudioDevice.setAudioModeAsync({
-          allowsRecordingIOS: true,
-          playsInSilentModeIOS: true,
-        });
-      }
+  useEffect(() => {
+    getAllFilePathsFromFolder();
+  },[])
 
-      const newRecording = new AudioDevice.Recording();
-      console.log("Starting Recording");
-      await newRecording.prepareToRecordAsync(
-        AudioDevice.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+  async function playAudio(file, especificUri) {
+    const playbackObject = new AudioDevice.Sound();
+    await playbackObject.loadAsync({
+      uri: (especificUri ? especificUri : 'file:///data/user/0/com.hvanin2.app_cats/cache/Audio/' + file),
+    });
+    await playbackObject.playAsync();
+  }
+  
+  async function startRecording() {
+    setTimeLeft(30);
+    try {
+      if (permissionResponse.status !== 'granted') {
+        console.log('Requesting permission..');
+        await requestPermission();
+      }
+      await AudioDevice.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+
+      console.log('Starting recording..');
+      const { recording } = await AudioDevice.Recording.createAsync( AudioDevice.RecordingOptionsPresets.HIGH_QUALITY
       );
-      await newRecording.startAsync();
-      setRecording(newRecording);
-      setRecordingStatus("recording");
-    } catch (error) {
-      console.error("Failed to start recording", error);
+      
+      setRecording(recording);
+      setRecordingStatus('recording');
+      console.log('Recording started');
+    } catch (err) {
+      console.error('Failed to start recording', err);
     }
   }
 
   async function stopRecording() {
-    try {
-      if (recordingStatus === "recording") {
-        console.log("Stopping Recording");
-        await recording.stopAndUnloadAsync();
-        const recordingUri = recording.getURI();
-        const dateNow = Date.now();
-        // Create a file name for the recording
-        const fileName = `recording-${dateNow}.caf`;
-
-        // Move the recording to the new directory with the new file name
-        await FileSystem.makeDirectoryAsync(
-          FileSystem.documentDirectory + "recordings/",
-          { intermediates: true }
-        );
-        await FileSystem.moveAsync({
-          from: recordingUri,
-          to: FileSystem.documentDirectory + "recordings/" + `${fileName}`,
-        });
-
-        // This is for simply playing the sound back
-        const playbackObject = new AudioDevice.Sound();
-        await playbackObject.loadAsync({
-          uri: FileSystem.documentDirectory + "recordings/" + `${fileName}`,
-        });
-        await playbackObject.playAsync();
-        let newAudio = {
-          title: fileName.split(`.`)[0],
-          url: fileName,
-          id: dateNow,
-        };
-        setAudioOptions([...audioOptions, newAudio]);
-
-        // resert our states to record again
-        setRecording(null);
-        setRecordingStatus("stopped");
+    console.log('Stopping recording..');
+    setRecording(undefined);
+    setRecordingStatus(undefined);
+    await recording.stopAndUnloadAsync();
+    await AudioDevice.setAudioModeAsync(
+      {
+        allowsRecordingIOS: false,
       }
-    } catch (error) {
-      console.error("Failed to stop recording", error);
+    );
+    const audioUri = recording.getURI();
+    try {
+      const audioBytes = await FileSystem.readAsStringAsync(audioUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      const partSize = Math.ceil(audioBytes.length / 3);
+      const audioParts = [
+        audioBytes.slice(0, partSize),
+        audioBytes.slice(partSize, partSize * 2),
+        audioBytes.slice(partSize * 2),
+      ];
+      for (let i = 0; i < audioParts.length; i++) {
+        const soundJson = JSON.stringify({
+          idAudio : audioUri,
+          filePart : i,
+          content : audioParts[i]
+        });
+        publishTopic(commandTopic.soundFile, soundJson);
+      }
+      getAllFilePathsFromFolder();
+    } catch (err) {
+      console.warn(err);
     }
   }
 
+  const getAllFilePathsFromFolder = async () => {
+    const path = 'file:///data/user/0/com.hvanin2.app_cats/cache/Audio/';
+    const list = await FileSystem.readDirectoryAsync(path);
+    setAudioFiles(list);
+  };
+ 
   async function handleRecordButtonPress() {
     if (recording) {
       const audioUri = await stopRecording(recording);
@@ -111,26 +154,68 @@ const Audio = () => {
     }
   }
 
+  async function handleDeleteAudio(file) {
+    FileSystem.deleteAsync('file:///data/user/0/com.hvanin2.app_cats/cache/Audio/' + file);
+    getAllFilePathsFromFolder();
+  }
+
+  
+  async function playLocalSound1() {
+    const { sound } = await AudioDevice.Sound.createAsync(
+      require('../../assets/audios/sound_1.mp3')
+    );
+    await sound.playAsync();
+  }
+
+  async function playLocalSound2() {
+    const { sound } = await AudioDevice.Sound.createAsync(
+      require('../../assets/audios/sound_2.mp3')
+    );
+    await sound.playAsync();
+  }
+
+  async function playLocalSound3() {
+    const { sound } = await AudioDevice.Sound.createAsync(
+      require('../../assets/audios/sound_3.mp3')
+    );
+    await sound.playAsync();
+  }
+
+  async function playLocalSound4() {
+    const { sound } = await AudioDevice.Sound.createAsync(
+      require('../../assets/audios/sound_4.mp3')
+    );
+    await sound.playAsync();
+  }
+
+  async function playLocalSound5() {
+    const { sound } = await AudioDevice.Sound.createAsync(
+      require('../../assets/audios/sound_5.mp3')
+    );
+    await sound.playAsync();
+  }
+
+
   return (
     <SafeAreaView className="flex-1 bg-[#191C4A]">
       <View className="flex-row justify-start p-8">
         <Text className="text-2xl text-white">Audio</Text>
       </View>
-      <AudioRow title={"Sound"} />
-      <AudioRow title={"Sound"} />
-      <AudioRow title={"Sound"} />
-      <AudioRow title={"Sound"} />
-      <AudioRow title={"Sound"} />
-      {audioOptions?.map((audio) => {
-        <AudioRow title={audio.title} excludable={true} />;
-      })}
-      <View className="flex-row p-8">
+      <AudioRow title={"Predefined Sound 1"} play={() => playLocalSound1()}/>
+      <AudioRow title={"Predefined Sound 2"} play={() => playLocalSound2()}/>
+      <AudioRow title={"Predefined Sound 3"} play={() => playLocalSound3()}/>
+      <AudioRow title={"Predefined Sound 4"} play={() => playLocalSound4()}/>
+      <AudioRow title={"Predefined Sound 5"} play={() => playLocalSound5()}/>
+      {audioFiles?.map((audio, index) => 
+        <AudioRow key={index} title={`Custom Audio ${index + 1}`} excludable={true} play={() => playAudio(audio)} deleteAction={handleDeleteAudio} id={audio}/>
+      )}
+      <View className="flex-row p-6">
         <CustomButton
           handlePress={handleRecordButtonPress}
           title={`${
-            recordingStatus === "recording" ? "Recording..." : "Record"
+            recordingStatus === "recording" ? `Recording... ${timeLeft &&  timeLeft > 0 && timeLeft} left` : "Record"
           }`}
-          containerStyles={"flex justify-center w-full bg-terciary p-3"}
+          containerStyles={`flex justify-center w-full bg-terciary p-3 ${recordingStatus === "recording" && 'bg-red-400'}`}
         />
       </View>
     </SafeAreaView>

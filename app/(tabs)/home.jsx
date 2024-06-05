@@ -1,4 +1,4 @@
-import { Button, ScrollView, Text, View } from "react-native";
+import { Button, ScrollView, Text, TouchableHighlight, View } from "react-native";
 import Header from "../components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import WaterStatus from "../components/WaterStatus";
@@ -12,19 +12,21 @@ import useMQTT from "../components/MQTT";
 import { commandTopic } from "../components/MQTT/commands";
 import { useAlertStore } from "../components/MQTT/store";
 import CustomButton from "../components/CustomButton";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const repository = new ActivityRepository();
 
-const Home = () => {
-  const [activities, setActivities] = useState([]);
-  const [time, setTime] = useState(1);
-  const mqtt = useMQTT();
+const Home = () => {  
+  const { PublishMessage } = useMQTT();
+  const publishTopic = (topic, msg) => {
+    PublishMessage(topic, msg);
+  }
   const alertStore = useAlertStore();  
   
 
   const all = async () => {
     const activities = await repository.all();
-    alertStore.setActivities(activities);
+      alertStore.setActivities(activities);
   };
 
   const clearTable = async () => {
@@ -36,34 +38,29 @@ const Home = () => {
     all();
   }, []);
 
-  // useEffect(() => {
-  //   // Use setTimeout to update the message after 2000 milliseconds (2 seconds)
-  //   const timeoutId = setTimeout(() => {
-  //     create(`Activity ${time}`, String(Date.now()));
-  //     setTime(time + 1);
-  //   }, 2000);
-
-  //   // Cleanup function to clear the timeout if the component unmounts
-  //   return () => clearTimeout(timeoutId);
-  // }, []); // Empty dependency array ensures the effect runs only once
-
   return (
     <SafeAreaView className="flex-1 justify-start bg-[#191C4A]">
       <Header />
       <WaterStatus level={alertStore?.alertStatus?.waterLevelAlert} temperature={(alertStore?.alertStatus?.waterTemperature + "ºC")} />
       <View className="flex-row w-full justify-between pr-2">
-        <StatusCard title={"Ball Launcher"} ammount={0} />
-        <StatusCard title={"Snack Dispenser"} ammount={0} />
+        <TouchableHighlight className="flex-row w-[47%] rounded-lg justify-start items-center p-3 px-3 bg-secondary ml-2" onPress={()=>publishTopic(commandTopic.pumpOnOff, "pump turn on/off")}>
+           <>
+            <MaterialCommunityIcons name="water-outline" color={'#40e0d0'} size={20} className="mr-2" />
+            <Text className="font-semibold text-white">Turn Fountain On/Off</Text>
+           </>
+        </TouchableHighlight>
+        {/* <StatusCard title={"Ball Launcher"} ammount={'-'} /> */}
+        <StatusCard title={"Snack Dispenser"} ammount={'-'} icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />} />
       </View>
       <View className="flex flex-row justify-between mr-8">
-        <Text className="p-3 pl-5 mt-0 text-2xl font-semibold text-white">
+        <Text className="p-3 pl-3 mt-0 text-2xl font-semibold text-white">
           Recent Activities
         </Text>
         <CustomButton title="Clear" handlePress={clearTable}/>
       </View>
       <ScrollView className="flex-1 w-full">
         {alertStore.activities.reverse().filter((item) => item.title).map((activity) => (
-          <View key={activity.id}>
+          <View key={activity.timeStamp}>
             <ActivityCard
               title={activity.title}
               date={String(new Date(Number(activity.timeStamp)))}
