@@ -19,7 +19,7 @@ import {
   AWS_COGNITO_IDENTITY_POOL_ID,
   AWS_IOT_ENDPOINT,
 } from "./settings";
-import { alertTitle, alertTopic } from "./commands";
+import { alertTitle, alertTopic, alertType } from "./commands";
 import { useAlertStore } from "./store";
 import ActivityRepository from "../../database/ActivityRepository";
 
@@ -145,11 +145,10 @@ function useMQTT() {
 
   const create = async (title: string, type: string) => {
     const date = String(Date.now());
-
     Toast.show({
-      type: 'success',
+      type: alertType[type],
       text1: title,
-      text2: 'teste'
+      text2: String(new Date(Number(date)))
     });
   
     await repository.create({

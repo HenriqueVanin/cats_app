@@ -41,8 +41,9 @@ const Home = () => {
   return (
     <SafeAreaView className="flex-1 justify-start bg-[#191C4A]">
       <Header />
-      <WaterStatus level={alertStore?.alertStatus?.waterLevelAlert} temperature={(alertStore?.alertStatus?.waterTemperature + "ºC")} />
-      <View className="flex-row w-full justify-between pr-2">
+      {console.log(alertStore?.alertStatus?.temperatureAlert)}
+      <WaterStatus level={alertStore?.alertStatus?.waterLevelAlert} temperature={(alertStore?.alertStatus?.waterTemperature + "ºC")} temperatureAlert={alertStore?.alertStatus?.temperatureAlert} />
+      <View className="flex-row w-full justify-between pr-4 pl-2">
         <TouchableHighlight className="flex-row w-[47%] rounded-lg justify-start items-center p-3 px-3 bg-secondary ml-2" onPress={()=>publishTopic(commandTopic.pumpOnOff, "pump turn on/off")}>
            <>
             <MaterialCommunityIcons name="water-outline" color={'#40e0d0'} size={20} className="mr-2" />
@@ -50,10 +51,10 @@ const Home = () => {
            </>
         </TouchableHighlight>
         {/* <StatusCard title={"Ball Launcher"} ammount={'-'} /> */}
-        <StatusCard title={"Snack Dispenser"} ammount={'-'} icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />} />
+        <StatusCard title={"Snacks"} ammount={alertStore?.alertStatus?.snacksLevelAlert} icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />} />
       </View>
       <View className="flex flex-row justify-between mr-8">
-        <Text className="p-3 pl-3 mt-0 text-2xl font-semibold text-white">
+        <Text className="p-3 pl-4 mt-0 text-2xl font-semibold text-white">
           Recent Activities
         </Text>
         <CustomButton title="Clear" handlePress={clearTable}/>
