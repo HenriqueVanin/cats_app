@@ -19,7 +19,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [scheduleTime, setScheduleTime] = useState([]);
-  const [daily, setDaily] = useState(false);
+  const [daily, setDaily] = useState(true);
   
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -77,38 +77,46 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
         {/* <Switch /> */}
       </View>
       <View className="flex-grid justify-start pl-6 gap-2">
-        <View className="w-[70%] rounded-lg flex flex-row">
+        <View className="w-[90%] rounded-lg flex flex-row">
           <TouchableOpacity
-            className="bg-terciary w-[50%] p-4 rounded rounded-md mr-1"
+            className="bg-terciary w-[80%] p-4 rounded rounded-md mr-1"
             onPress={()=> showTimePicker()}
           >
             <Text className="text-[16px] text-white">
               {selectedTime ? String(selectedTime) : "SELECT TIME"}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             className="bg-terciary w-[50%]  p-4 rounded rounded-md"
             onPress={()=> showDatePicker()}
           >
             <Text className="text-[16px] text-white">
               {selectedDate ? String(selectedDate) : "SELECT DATE"}
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </TouchableOpacity> */}
+          {/* <TouchableOpacity
             className={`${daily ? "bg-secondary" : "bg-terciary"} w-[30%] ml-1 p-4 rounded rounded-md`}
-            onPress={()=> setDaily(!daily)}
+            // onPress={()=> setDaily(!daily)}
           >
             <Text className="text-[16px] text-white">
               DAILY
             </Text>
+          </TouchableOpacity> */}
+          <TouchableOpacity
+            className="bg-secondary w-20 p-3 rounded rounded-md justify-center items-center flex-row"
+            onPress={handleAddNewSchedule}
+          >
+            <Text className="text-[16px] font-bold text-white">
+              Add
+            </Text>
           </TouchableOpacity>
-          <DateTimePickerModal
+          {/* <DateTimePickerModal
             mode="time"
             isVisible={isTimePickerVisible}
             onCancel={hideTimePicker}
             onConfirm={handleTimeConfirm}
-          />
-            <DateTimePickerModal
+          /> */}
+          <DateTimePickerModal
             mode="date"
             isVisible={isDatePickerVisible}
             onConfirm={handleDateConfirm}
@@ -126,14 +134,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
             <Picker.Item label="2x A DAY" value="java" />
             <Picker.Item label="3x A DAY" value="js" />
           </Picker> */}
-          <TouchableOpacity
-            className="bg-secondary p-3 rounded rounded-md justify-center flex-row"
-            onPress={handleAddNewSchedule}
-          >
-            <Text className="text-[16px] font-bold text-white">
-              Add
-            </Text>
-          </TouchableOpacity>
+          
         </View>
       </View>
       <View className="grid w-[100%] gap-2 mt-2 ml-4">

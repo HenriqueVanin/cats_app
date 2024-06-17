@@ -5,6 +5,9 @@ import Mqtt from "./components/MQTT";
 import "react-native-get-random-values";
 import "react-native-url-polyfill/auto";
 import { ReadableStream } from "web-streams-polyfill/ponyfill/es6";
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 globalThis.ReadableStream = ReadableStream;
 
 export default function Welcome() {
