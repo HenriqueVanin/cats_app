@@ -26,6 +26,10 @@ const throttle = (func, delay) => {
 const Control = () => {
     const { PublishMessage } = useMQTT();
     const [count, setCount] = useState(0);
+    const [disableSound, setDisableSound] = useState(false);
+    const [disableBallLauncher, setDisableBallLauncher] = useState(false);
+    const [disableSnackDispenser, setDisableSnackDispenser] = useState(false);
+    
     const publishTopic = (topic, msg) => {
         PublishMessage(topic, msg);
     };
@@ -53,11 +57,39 @@ const Control = () => {
         if (count > 10) setCount(0);
     }
     useEffect(() => {
+        publishTopic(commandTopic.cameraOnOff, 'switch camera');
         getAllFilePathsFromFolder();
     }, []);
     useEffect(() => {
         getAllFilePathsFromFolder();
     }, [count]);
+
+    const handlePlaySound = async () => {
+      setDisableSound(true);
+      open();
+      await delay(30000);
+      setDisableSound(false);
+    }
+
+    const handleThrowBall = async () => {
+      setDisableSound(true);
+      publishTopic(
+        commandTopic.ballLaunch,
+        'request a ball'
+      );
+      await delay(30000);
+      setDisableSound(false);
+    }
+
+    const handleServeSnack = async () => {
+      setDisableSound(true);
+      publishTopic(
+        commandTopic.dropSnacks,
+        'request to drop some snacks'
+      );
+      await delay(30000);
+      setDisableSound(false);
+    }
 
     return (
         <SafeAreaView className="flex-1 items-center bg-[#191C4A]">
@@ -76,41 +108,31 @@ const Control = () => {
                 <View className="flex-row justify-between mt-3">
                     <CustomButton
                         title="PLAY SOUND"
-                        isLoading={false}
+                        isLoading={disableSound}
                         containerStyles={'w-[30%] bg-terciary h-12'}
                         textStyles={'text-[12px]'}
-                        handlePress={() => open()}
+                        handlePress={handlePlaySound}
                     />
                     <CustomButton
                         title="THROW BALL"
-                        isLoading={false}
+                        isLoading={disableBallLauncher}
                         containerStyles={'w-[30%] bg-terciary h-12'}
                         textStyles={'text-[12px]'}
-                        handlePress={() =>
-                            publishTopic(
-                                commandTopic.ballLaunch,
-                                'request a ball'
-                            )
-                        }
+                        handlePress={handleThrowBall}
                     />
                     <CustomButton
                         title="SERVE SNACK"
-                        isLoading={false}
+                        isLoading={disableSnackDispenser}
                         containerStyles={'w-[30%] bg-terciary h-12'}
                         textStyles={'text-[12px]'}
-                        handlePress={() =>
-                            publishTopic(
-                                commandTopic.dropSnacks,
-                                'request to drop some snacks'
-                            )
-                        }
+                        handlePress={handleServeSnack}
                     />
                 </View>
             </View>
             <View className="mb-10">
                 <ReactNativeJoystick
                     color="#09C3B8"
-                    radius={120}
+                    radius={80}
                     onMove={(data) =>
                         handlePress(
                             commandTopic.laserPosition,

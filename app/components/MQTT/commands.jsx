@@ -11,6 +11,8 @@ export const commandTopic = {
   delSchedule: "/delSchedule",
   soundPlay: "/playSound",
   soundFile: "/fileSound",
+  systemOnOff: "/turnOffSystem",
+  cameraOnOff: "/onOffLaser"
 };
 
 export const iconActivity = {

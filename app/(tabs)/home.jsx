@@ -38,10 +38,20 @@ const Home = () => {
     all();
   }, []);
 
+  useEffect(() => {
+    publishTopic(commandTopic.cameraOnOff, "off");
+    publishTopic(commandTopic.laserOnOff, "off"); 
+  },[]);
+
   return (
     <SafeAreaView className="flex-1 justify-start bg-[#191C4A]">
-      <Header />
-      {console.log(alertStore?.alertStatus?.temperatureAlert)}
+      <View className="flex-row justify-between items-center p-5 pr-2 w-full gap-3">
+      <Text className="font-bold text-white text-3xl">C.A.T.S.</Text>
+      <TouchableHighlight className="flex-row w-[30%] rounded-lg justify-start items-center p-3 px-3 bg-terciary ml-2" onPress={()=>publishTopic(commandTopic.systemOnOff, "system turn on/off")}>
+           <>
+            <Text className="font-semibold text-white">Turn On/Off</Text>
+           </>
+        </TouchableHighlight></View>
       <WaterStatus level={alertStore?.alertStatus?.waterLevelAlert} temperature={(alertStore?.alertStatus?.waterTemperature + "ºC")} temperatureAlert={alertStore?.alertStatus?.temperatureAlert} />
       <View className="flex-row w-full justify-between pr-4 pl-2">
         <TouchableHighlight className="flex-row w-[47%] rounded-lg justify-start items-center p-3 px-3 bg-secondary ml-2" onPress={()=>publishTopic(commandTopic.pumpOnOff, "pump turn on/off")}>
@@ -50,7 +60,6 @@ const Home = () => {
             <Text className="font-semibold text-white">Turn Fountain On/Off</Text>
            </>
         </TouchableHighlight>
-        {/* <StatusCard title={"Ball Launcher"} ammount={'-'} /> */}
         <StatusCard title={"Snacks"} ammount={alertStore?.alertStatus?.snacksLevelAlert} icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />} />
       </View>
       <View className="flex flex-row justify-between mr-8">

@@ -62,11 +62,21 @@ const Audio = () => {
         stopRecording();
       }
     };
-  }, []);
+  }, [recording]);
+
+  useEffect(() => {
+    publishTopic(commandTopic.cameraOnOff, "off");
+    publishTopic(commandTopic.laserOnOff, "off"); 
+  },[]);
 
   useEffect(() => {
     getAllFilePathsFromFolder();
-  },[])
+  },[recording]);
+  
+  
+  useEffect(() => {
+    getAllFilePathsFromFolder();
+  },[]);
 
   async function playAudio(file, especificUri) {
     const playbackObject = new AudioDevice.Sound();
@@ -89,8 +99,7 @@ const Audio = () => {
       });
 
       console.log('Starting recording..');
-      const { recording } = await AudioDevice.Recording.createAsync( AudioDevice.RecordingOptionsPresets.HIGH_QUALITY
-      );
+      const { recording } = await AudioDevice.Recording.createAsync(AudioDevice.RecordingOptionsPresets.HIGH_QUALITY);
       
       setRecording(recording);
       setRecordingStatus('recording');
@@ -111,6 +120,7 @@ const Audio = () => {
       }
     );
     const audioUri = recording.getURI();
+    console.log(audioUri);
     try {
       const audioBytes = await FileSystem.readAsStringAsync(audioUri, {
         encoding: FileSystem.EncodingType.Base64,
@@ -123,11 +133,13 @@ const Audio = () => {
       ];
       for (let i = 0; i < audioParts.length; i++) {
         const soundJson = JSON.stringify({
-          idAudio : audioUri,
+          id : audioFiles.length + 5,
+          name : audioUri,
           filePart : i,
           content : audioParts[i]
         });
         publishTopic(commandTopic.soundFile, soundJson);
+        await delay(500);
       }
       getAllFilePathsFromFolder();
     } catch (err) {
@@ -143,10 +155,7 @@ const Audio = () => {
  
   async function handleRecordButtonPress() {
     if (recording) {
-      const audioUri = await stopRecording(recording);
-      if (audioUri) {
-        console.log("Saved audio file to", savedUri);
-      }
+      await stopRecording(recording);
     } else {
       await startRecording();
     }

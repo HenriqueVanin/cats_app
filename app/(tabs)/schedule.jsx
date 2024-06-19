@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ScheduleRow from "../components/ScheduleRow";
 import { icons } from "../../constants";
-import { scheduleId } from "../components/MQTT/commands";
+import { commandTopic, scheduleId } from "../components/MQTT/commands";
 import useMQTT from "../components/MQTT";
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,6 +12,12 @@ const Schedule = () => {
   const publishTopic = (topic, msg) => {
     PublishMessage(topic, msg);
   }
+  
+  useEffect(() => {
+    publishTopic(commandTopic.cameraOnOff, "off");
+    publishTopic(commandTopic.laserOnOff, "off"); 
+  },[]);
+
   return (
     <SafeAreaView className="flex-1 bg-[#191C4A]">
       <View className="flex-row items-start p-8 pb-2">
