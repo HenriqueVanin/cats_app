@@ -34,16 +34,19 @@
         },
         "plugins": [
             "@config-plugins/react-native-webrtc",
-            "expo-router", 
+            "expo-router",
             [
                 "expo-build-properties",
-                    {
-                        "android": {
-                            "minSdkVersion": 23,
-                            "compileSdkVersion": 34,
-                            "targetSdkVersion": 34
+                {
+                    "android": {
+                        "minSdkVersion": 23,
+                        "compileSdkVersion": 34,
+                        "targetSdkVersion": 34,
+                        "packagingOptions": {
+                            "pickFirst": ["**/libcrypto.so"]
                         }
                     }
+                }
             ]
         ],
         "extra": {
@@ -51,7 +54,7 @@
                 "origin": false
             },
             "eas": {
-                "projectId": "06c5d099-f8d2-4b5d-8f28-8a542f12d38a"
+                "projectId": "61113223-0389-4ba5-aabb-a5a69a5c50e2"
             }
         }
     }
