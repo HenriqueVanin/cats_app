@@ -1,11 +1,11 @@
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ScheduleRow from "../components/ScheduleRow";
-import { icons } from "../../constants";
 import { commandTopic, scheduleId } from "../components/MQTT/commands";
 import useMQTT from "../components/MQTT";
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useEffect } from "react";
 
 const Schedule = () => {
   const { PublishMessage } = useMQTT();

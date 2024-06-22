@@ -2,12 +2,13 @@ import { ReactNativeJoystick } from '@korsolutions/react-native-joystick';
 import { Picker } from '@react-native-picker/picker';
 import * as FileSystem from 'expo-file-system';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import useMQTT from '../components/MQTT';
 import { commandTopic } from '../components/MQTT/commands';
 import KinesisWebRTCViewer from '../components/VideoKinesis/KinesisWebRTCViewer';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const throttle = (func, delay) => {
     let throttling = false;
@@ -29,6 +30,7 @@ const Control = () => {
     const [disableSound, setDisableSound] = useState(false);
     const [disableBallLauncher, setDisableBallLauncher] = useState(false);
     const [disableSnackDispenser, setDisableSnackDispenser] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     
     const publishTopic = (topic, msg) => {
         PublishMessage(topic, msg);
@@ -93,7 +95,7 @@ const Control = () => {
 
     return (
         <SafeAreaView className="flex-1 items-center bg-[#191C4A]">
-            <View className="h-[230px] bg-gray-200 m-6 rounded-lg w-[90%] overflow-hidden">
+            <View className="h-[280px] bg-gray-200 m-6 w-full overflow-hidden">
                 <KinesisWebRTCViewer />
             </View>
             <View className="flex-1 w-full px-6">

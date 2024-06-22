@@ -49,7 +49,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
     const date = daily ? "" :("#" + selectedDate.split("/")[0] + "#" + selectedDate.split("/")[1]) ;
     publishTopic(
       commandTopic.setSchedule,
-      commandId + "#" + selectedTime.replace(":", "") + date
+      commandId + "#" + selectedTime?.replace(":", "") + date
     );
   };
   const handleDeleteSchedule = (id) => {
@@ -61,7 +61,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
         ":" +
         scheduleTime
           .filter((item) => item.id === id)[0]
-          .time.replaceAll(":", "")
+          .time?.replaceAll(":", "")
     );
   };
 
@@ -137,7 +137,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
           
         </View>
       </View>
-      <View className="grid w-[100%] gap-2 mt-2 ml-4">
+      <ScrollView className="grid w-[100%] gap-2 mt-2 ml-4 overflow-auto max-h-[20vh]">
         {scheduleTime?.map((item) => (
           <View
             key={item.id}
@@ -156,7 +156,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
             </TouchableOpacity>
           </View>
         ))}
-      </View>
+      </ScrollView>
     </ScrollView>
   );
 };

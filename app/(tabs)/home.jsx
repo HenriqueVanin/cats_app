@@ -43,22 +43,33 @@ const Home = () => {
     publishTopic(commandTopic.laserOnOff, "off"); 
   },[]);
 
+  function recentActivity( a, b ) {
+    if ( Number(a.timeStamp) < Number(b.timeStamp) ){
+      return 1;
+    }
+    if (  Number(a.timeStamp) >  Number(b.timeStamp) ){
+      return -1;
+    }
+    return 0;
+  }
+
   return (
     <SafeAreaView className="flex-1 justify-start bg-[#191C4A]">
       <View className="flex-row justify-between items-center p-5 pr-2 w-full gap-3">
       <Text className="font-bold text-white text-3xl">C.A.T.S.</Text>
-      <TouchableHighlight className="flex-row w-[30%] rounded-lg justify-start items-center p-3 px-3 bg-terciary ml-2" onPress={()=>publishTopic(commandTopic.systemOnOff, "system turn on/off")}>
-           <>
-            <Text className="font-semibold text-white">Turn On/Off</Text>
-           </>
+      <TouchableHighlight className="flex-row w-[40%] rounded-lg justify-center items-center py-3 bg-terciary ml-2" onPress={()=>publishTopic(commandTopic.systemOnOff, "system turn on/off")}>
+           <View className="flex flex-row gap-2 items-center">
+            <MaterialCommunityIcons name="power" color={'#40e0d0'} size={20} className="mr-3" />
+            <Text className="font-semibold text-white text-lg">Turn On/Off</Text>
+           </View>
         </TouchableHighlight></View>
       <WaterStatus level={alertStore?.alertStatus?.waterLevelAlert} temperature={(alertStore?.alertStatus?.waterTemperature + "ºC")} temperatureAlert={alertStore?.alertStatus?.temperatureAlert} />
       <View className="flex-row w-full justify-between pr-4 pl-2">
         <TouchableHighlight className="flex-row w-[47%] rounded-lg justify-start items-center p-3 px-3 bg-secondary ml-2" onPress={()=>publishTopic(commandTopic.pumpOnOff, "pump turn on/off")}>
-           <>
-            <MaterialCommunityIcons name="water-outline" color={'#40e0d0'} size={20} className="mr-2" />
-            <Text className="font-semibold text-white">Turn Fountain On/Off</Text>
-           </>
+            <View className="flex flex-row gap-2 items-center">
+              <MaterialCommunityIcons name="water-outline" color={'#40e0d0'} size={20} className="mr-2" />
+              <Text className="font-semibold text-white text-lg">Pump On/Off</Text>
+            </View>
         </TouchableHighlight>
         <StatusCard title={"Snacks"} ammount={alertStore?.alertStatus?.snacksLevelAlert} icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />} />
       </View>
@@ -69,7 +80,7 @@ const Home = () => {
         <CustomButton title="Clear" handlePress={clearTable}/>
       </View>
       <ScrollView className="flex-1 w-full">
-        {alertStore.activities.reverse().filter((item) => item.title).map((activity) => (
+        {alertStore.activities.sort(recentActivity).filter((item) => item.title).map((activity) => (
           <View key={activity.timeStamp}>
             <ActivityCard
               title={activity.title}

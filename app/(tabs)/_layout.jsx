@@ -2,16 +2,13 @@ import { Tabs } from "expo-router";
 import { icons } from "../../constants";
 import { View, Text, Image } from "react-native";
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
     <View className="items-center justify-center gap-2 mt-1">
-      <Image
-        source={icon}
-        resizeMode="contain"
-        tintColor={color}
-        className="w-6 h-6"
-      />
-      <Text className={`${focused ? "font-semibold" : "font-regular"} text-xs`}>
+      <MaterialCommunityIcons name={icon} color={color} size={35} />
+      <Text className={`${focused ? "font-bold" : "font-regular"} text-md`}>
         {name}
       </Text>
     </View>
@@ -40,7 +37,7 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              icon={icons.home}
+              icon={"home-variant-outline"}
               color={color}
               name="Home"
               focused={focused}
@@ -55,7 +52,7 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              icon={icons.play}
+              icon={'camera-control'}
               color={color}
               name="Control"
               focused={focused}
@@ -70,7 +67,7 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              icon={icons.menu}
+              icon={"calendar"}
               color={color}
               name="Schedule"
               focused={focused}
@@ -85,7 +82,7 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              icon={icons.upload}
+              icon={'volume-high'}
               color={color}
               name="Audio"
               focused={focused}
