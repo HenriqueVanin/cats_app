@@ -257,7 +257,7 @@ function useMQTT() {
   }
 
   async function PublishMessage(topicName: string, msg: string) {
-    if (client) {
+    testSuccessfulConnection().then(async () => {
       const publishResult = await client
         .publish({
           qos: mqtt5.QoS.AtLeastOnce,
@@ -277,7 +277,7 @@ function useMQTT() {
         .catch((error) => {
           log(`Error publishing: ${error}`);
         });
-    }
+    });
   }
 
   useEffect(() => {

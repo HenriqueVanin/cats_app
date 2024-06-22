@@ -1,11 +1,11 @@
 import { Button, ScrollView, Text, TouchableHighlight, View } from "react-native";
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import WaterStatus from "../components/WaterStatus";
 import StatusCard from "../components/StatusCard";
 import ActivityCard from "../components/ActivityCard";
 
-import { icons } from "../../constants";
+// import { icons } from "../../constants";
 import { useEffect, useState } from "react";
 import ActivityRepository from "../database/ActivityRepository";
 import useMQTT from "../components/MQTT";
@@ -60,7 +60,7 @@ const Home = () => {
       <TouchableHighlight className="flex-row w-[40%] rounded-lg justify-center items-center py-3 bg-terciary ml-2" onPress={()=>publishTopic(commandTopic.systemOnOff, "system turn on/off")}>
            <View className="flex flex-row gap-2 items-center">
             <MaterialCommunityIcons name="power" color={'#40e0d0'} size={20} className="mr-3" />
-            <Text className="font-semibold text-white text-lg">Turn On/Off</Text>
+            <Text className="font-semibold text-white text-lg">Turn Off</Text>
            </View>
         </TouchableHighlight></View>
       <WaterStatus level={alertStore?.alertStatus?.waterLevelAlert} temperature={(alertStore?.alertStatus?.waterTemperature + "ºC")} temperatureAlert={alertStore?.alertStatus?.temperatureAlert} />

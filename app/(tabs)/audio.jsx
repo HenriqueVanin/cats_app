@@ -108,7 +108,6 @@ const Audio = () => {
       console.error('Failed to start recording', err);
     }
   }
-
   async function stopRecording() {
     console.log('Stopping recording..');
     setRecording(undefined);

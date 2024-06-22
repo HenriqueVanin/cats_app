@@ -12,7 +12,7 @@ export const commandTopic = {
   soundPlay: "/playSound",
   soundFile: "/fileSound",
   systemOnOff: "/turnOffSystem",
-  cameraOnOff: "/onOffLaser"
+  cameraOnOff: "/onOffCamera"
 };
 
 export const iconActivity = {
