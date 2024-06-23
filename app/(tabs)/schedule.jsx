@@ -13,10 +13,10 @@ const Schedule = () => {
     PublishMessage(topic, msg);
   }
   
-  useEffect(() => {
-    publishTopic(commandTopic.cameraOnOff, "off");
-    publishTopic(commandTopic.laserOnOff, "off"); 
-  },[]);
+  // useEffect(() => {
+  //   publishTopic(commandTopic.cameraOnOff, "off");
+  //   publishTopic(commandTopic.laserOnOff, "off"); 
+  // },[]);
 
   return (
     <SafeAreaView className="flex-1 bg-[#191C4A]">

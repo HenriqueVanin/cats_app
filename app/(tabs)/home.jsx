@@ -38,10 +38,10 @@ const Home = () => {
     all();
   }, []);
 
-  useEffect(() => {
-    publishTopic(commandTopic.cameraOnOff, "off");
-    publishTopic(commandTopic.laserOnOff, "off"); 
-  },[]);
+  // useEffect(() => {
+  //   publishTopic(commandTopic.cameraOnOff, "off");
+  //   publishTopic(commandTopic.laserOnOff, "off"); 
+  // },[]);
 
   function recentActivity( a, b ) {
     if ( Number(a.timeStamp) < Number(b.timeStamp) ){

@@ -62,7 +62,7 @@ const Control = () => {
         if (count > 10) setCount(0);
     }
     useEffect(() => {
-        publishTopic(commandTopic.cameraOnOff, 'switch camera');
+        // publishTopic(commandTopic.cameraOnOff, 'switch camera');
         getAllFilePathsFromFolder();
     }, []);
     useEffect(() => {

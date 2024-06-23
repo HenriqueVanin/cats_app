@@ -65,10 +65,10 @@ const Audio = () => {
     };
   }, [recording]);
 
-  useEffect(() => {
-    publishTopic(commandTopic.cameraOnOff, "off");
-    publishTopic(commandTopic.laserOnOff, "off"); 
-  },[]);
+  // useEffect(() => {
+  //   publishTopic(commandTopic.cameraOnOff, "off");
+  //   publishTopic(commandTopic.laserOnOff, "off"); 
+  // },[]);
 
   useEffect(() => {
     getAllFilePathsFromFolder();
@@ -124,7 +124,7 @@ const Audio = () => {
     try {
       const audioBytes = await FileSystem.readAsStringAsync(audioUri, {
         encoding: FileSystem.EncodingType.Base64,
-      });
+      });publishTopic
       const partSize = Math.ceil(audioBytes.length / 3);
       const audioParts = [
         audioBytes.slice(0, partSize),
@@ -139,7 +139,7 @@ const Audio = () => {
           content : audioParts[i]
         });
         console.log(soundJson);
-        publishTopic(commandTopic.soundFile, soundJson);
+        (commandTopic.soundFile, soundJson);
         await timer(500);
       }
       getAllFilePathsFromFolder();
