@@ -17,6 +17,7 @@ const Audio = () => {
   const publishTopic = (topic, msg) => {
     PublishMessage(topic, msg);
   }
+  const timer = ms => new Promise(res => setTimeout(res, ms));
   const [timeLeft, setTimeLeft] = useState(null);
   const AUDIO_DIR = FileSystem.cacheDirectory + "/Audio/"
   useEffect(() => {
@@ -137,8 +138,9 @@ const Audio = () => {
           filePart : i,
           content : audioParts[i]
         });
+        console.log(soundJson);
         publishTopic(commandTopic.soundFile, soundJson);
-        await delay(500);
+        await timer(500);
       }
       getAllFilePathsFromFolder();
     } catch (err) {
