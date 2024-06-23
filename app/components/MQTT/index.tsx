@@ -282,6 +282,7 @@ function useMQTT() {
 
   useEffect(() => {
     testSuccessfulConnection(); //initial execution
+    PublishMessage("/onOffVideoStreaming", "off");
   }, []);
 
   async function CloseConnection() {

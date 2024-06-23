@@ -9,6 +9,7 @@ import useMQTT from '../components/MQTT';
 import { commandTopic } from '../components/MQTT/commands';
 import KinesisWebRTCViewer from '../components/VideoKinesis/KinesisWebRTCViewer';
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import { useAlertStore } from '../components/MQTT/store';
 
 const throttle = (func, delay) => {
     let throttling = false;
@@ -31,6 +32,8 @@ const Control = () => {
     const [disableBallLauncher, setDisableBallLauncher] = useState(false);
     const [disableSnackDispenser, setDisableSnackDispenser] = useState(false);
     const [refresh, setRefresh] = useState(false);
+
+    const {streamingState, setStreamingState} = useAlertStore();
     
     const publishTopic = (topic, msg) => {
         PublishMessage(topic, msg);
@@ -99,14 +102,24 @@ const Control = () => {
                 <KinesisWebRTCViewer />
             </View>
             <View className="flex-1 w-full px-6">
+            <View className="flex-row justify-between mt-1">
+                <CustomButton
+                    title={`CAMERA ${streamingState ? 'OFF' : 'ON'}`}
+                    isLoading={false}
+                    containerStyles={`w-[48%] ${streamingState ?'bg-terciary' : 'bg-secondary'} h-12 mb-2`}
+                    handlePress={() =>
+                        {publishTopic(commandTopic.streamingState, !streamingState);
+                        setStreamingState(!streamingState);}
+                    }
+                />
                 <CustomButton
                     title="LASER ON/OFF"
                     isLoading={false}
-                    containerStyles={'w-full bg-terciary h-12'}
+                    containerStyles={'w-[48%] bg-terciary h-12'}
                     handlePress={() =>
                         publishTopic(commandTopic.laserOnOff, 'switch laser')
                     }
-                />
+                /></View>
                 <View className="flex-row justify-between mt-3">
                     <CustomButton
                         title="PLAY SOUND"

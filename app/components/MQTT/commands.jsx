@@ -12,7 +12,8 @@ export const commandTopic = {
   soundPlay: "/playSound",
   soundFile: "/fileSound",
   systemOnOff: "/turnOffSystem",
-  cameraOnOff: "/onOffCamera"
+  cameraOnOff: "/onOffCamera",
+  streamingOnOff: "/onOffVideoStreaming"
 };
 
 export const iconActivity = {

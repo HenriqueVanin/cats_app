@@ -15,9 +15,12 @@ export interface AlertStore {
   activities : Activity[],
   setAlertStatus: (a: any) => void;
   setActivities:(activities: Activity[]) => void;
+  streamingState: boolean;
+  setStreamingState: (streamingState: boolean) => void;
 }
 
 export const useAlertStore = create<AlertStore>((set) => ({
+  streamingState: false,
   alertStatus: {
     waterTemperature: "-",
     waterLevelAlert: "-",
@@ -25,6 +28,7 @@ export const useAlertStore = create<AlertStore>((set) => ({
     temperatureAlert: ""
   },
   activities: [],
+  setStreamingState: (streamingState: boolean) => set(() => ({streamingState})),
   setActivities: (activities: Activity[]) => set(() => ({activities})),
   setAlertStatus: (alertStatus: any) => set((state) => ({ alertStatus })),
 }));
