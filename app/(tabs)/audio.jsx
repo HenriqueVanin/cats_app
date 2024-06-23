@@ -165,6 +165,8 @@ const Audio = () => {
   async function handleDeleteAudio(file) {
     FileSystem.deleteAsync(AUDIO_DIR + file);
     getAllFilePathsFromFolder();
+    PublishMessage(commandTopic.soundDel, file);
+    console.log(file)
   }
 
   

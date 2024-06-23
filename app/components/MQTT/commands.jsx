@@ -11,6 +11,7 @@ export const commandTopic = {
   delSchedule: "/delSchedule",
   soundPlay: "/playSound",
   soundFile: "/fileSound",
+  soundDel: "/delSound",
   systemOnOff: "/turnOffSystem",
   cameraOnOff: "/onOffCamera",
   streamingOnOff: "/onOffVideoStreaming"

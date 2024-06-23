@@ -69,31 +69,33 @@ const Control = () => {
         getAllFilePathsFromFolder();
     }, [count]);
 
+    const timer = ms => new Promise(res => setTimeout(res, ms));
+
     const handlePlaySound = async () => {
       setDisableSound(true);
       open();
-      await delay(30000);
+      await timer(30000);
       setDisableSound(false);
     }
 
     const handleThrowBall = async () => {
-      setDisableSound(true);
+        setDisableBallLauncher(true);
       publishTopic(
         commandTopic.ballLaunch,
         'request a ball'
       );
-      await delay(30000);
-      setDisableSound(false);
+      await timer(30000);
+      setDisableBallLauncher(false);
     }
 
     const handleServeSnack = async () => {
-      setDisableSound(true);
+        setDisableSnackDispenser(true);
       publishTopic(
         commandTopic.dropSnacks,
         'request to drop some snacks'
       );
-      await delay(30000);
-      setDisableSound(false);
+      await timer(30000);
+      setDisableSnackDispenser(false);
     }
 
     return (
@@ -161,7 +163,8 @@ const Control = () => {
                     ref={pickerRef}
                     style={{ width: '0%', height: 0 }}
                     onValueChange={(itemValue) =>
-                        PublishMessage(commandTopic.soundPlay, itemValue)
+                    {    PublishMessage(commandTopic.soundPlay, itemValue);
+                        console.log(itemValue);}
                     }
                 >
                     <Picker.Item
