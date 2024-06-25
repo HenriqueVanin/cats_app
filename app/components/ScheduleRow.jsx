@@ -51,6 +51,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
       commandTopic.setSchedule,
       commandId + "#" + selectedTime?.replace(":", "") + date
     );
+    setTimePickerVisibility(false);
   };
   const handleDeleteSchedule = (id) => {
     let newArray = scheduleTime.filter((item) => item.id !== id);
@@ -110,18 +111,18 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
               Add
             </Text>
           </TouchableOpacity>
-          {/* <DateTimePickerModal
+          <DateTimePickerModal
             mode="time"
             isVisible={isTimePickerVisible}
             onCancel={hideTimePicker}
             onConfirm={handleTimeConfirm}
-          /> */}
-          <DateTimePickerModal
+          />
+          {/* <DateTimePickerModal
             mode="date"
-            isVisible={isDatePickerVisible}
+            isVisible={true}
             onConfirm={handleDateConfirm}
             onCancel={hideDatePicker}
-          />
+          /> */}
         </View>
         <View className="w-[93%] rounded-lg bg-terciary">
           {/* <Picker

@@ -149,7 +149,7 @@ const Control = () => {
             <View className="mb-10">
                 <ReactNativeJoystick
                     color="#09C3B8"
-                    radius={80}
+                    radius={50}
                     onMove={(data) =>
                         handlePress(
                             commandTopic.laserPosition,
