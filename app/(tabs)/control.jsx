@@ -45,7 +45,7 @@ const Control = () => {
     const handlePress = useCallback(
         throttle((pos, data) => {
             publishTopic(pos, data);
-        }, 1000),
+        }, 200),
         []
     );
 
