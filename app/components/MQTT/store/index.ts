@@ -20,7 +20,7 @@ export interface AlertStore {
 }
 
 export const useAlertStore = create<AlertStore>((set) => ({
-  streamingState: false,
+  streamingState: true,
   alertStatus: {
     waterTemperature: "-",
     waterLevelAlert: "-",
