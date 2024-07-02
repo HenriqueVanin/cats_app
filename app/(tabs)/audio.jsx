@@ -139,7 +139,7 @@ const Audio = () => {
           content : audioParts[i]
         });
         console.log(soundJson);
-        (commandTopic.soundFile, soundJson);
+        publishTopic(commandTopic.soundFile, soundJson);
         await timer(500);
       }
       getAllFilePathsFromFolder();
