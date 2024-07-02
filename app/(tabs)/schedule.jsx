@@ -27,7 +27,7 @@ const Schedule = () => {
         <ScheduleRow
           title={"Ball Launcher"}
           icon={<MaterialCommunityIcons name="tennis-ball" color={'#fff'} size={25} />}
-          commandId={scheduleId.snackDispenser}
+          commandId={scheduleId.ballLauncher}
           publishTopic={publishTopic}
         />
       </View>

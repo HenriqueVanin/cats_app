@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import useMQTT from '../components/MQTT';
 import { commandTopic } from '../components/MQTT/commands';
-import KinesisWebRTCViewer from '../components/VideoKinesis/KinesisWebRTCViewer';
+//import KinesisWebRTCViewer from '../components/VideoKinesis/KinesisWebRTCViewer';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useAlertStore } from '../components/MQTT/store';
 
@@ -45,7 +45,7 @@ const Control = () => {
     const handlePress = useCallback(
         throttle((pos, data) => {
             publishTopic(pos, data);
-        }, 1000),
+        }, 170),
         []
     );
 
@@ -97,11 +97,11 @@ const Control = () => {
       await timer(30000);
       setDisableSnackDispenser(false);
     }
-
+//<KinesisWebRTCViewer />
     return (
         <SafeAreaView className="flex-1 items-center bg-[#191C4A]">
             <View className="h-[280px] bg-gray-200 m-6 w-full overflow-hidden">
-                <KinesisWebRTCViewer />
+                
             </View>
             <View className="flex-1 w-full px-6">
             <View className="flex-row justify-between mt-1">
@@ -110,7 +110,7 @@ const Control = () => {
                     isLoading={false}
                     containerStyles={`w-[48%] ${streamingState ?'bg-terciary' : 'bg-secondary'} h-12 mb-2`}
                     handlePress={() =>
-                        {publishTopic(commandTopic.streamingState, !streamingState);
+                        {publishTopic(commandTopic.streamingOnOff, !streamingState);
                         setStreamingState(!streamingState);}
                     }
                 />

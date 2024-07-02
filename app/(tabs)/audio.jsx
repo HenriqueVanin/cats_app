@@ -124,7 +124,7 @@ const Audio = () => {
     try {
       const audioBytes = await FileSystem.readAsStringAsync(audioUri, {
         encoding: FileSystem.EncodingType.Base64,
-      });publishTopic
+      });
       const partSize = Math.ceil(audioBytes.length / 3);
       const audioParts = [
         audioBytes.slice(0, partSize),
@@ -140,7 +140,7 @@ const Audio = () => {
         });
         console.log(soundJson);
         publishTopic(commandTopic.soundFile, soundJson);
-        await timer(500);
+        await timer(1000);
       }
       getAllFilePathsFromFolder();
     } catch (err) {

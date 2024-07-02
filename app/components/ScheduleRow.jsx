@@ -59,7 +59,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
     publishTopic(
       commandTopic.delSchedule,
       commandId +
-        ":" +
+        "#" +
         scheduleTime
           .filter((item) => item.id === id)[0]
           .time?.replaceAll(":", "")
