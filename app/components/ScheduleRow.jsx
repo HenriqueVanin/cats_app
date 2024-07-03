@@ -11,6 +11,7 @@ import { useState } from "react";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { commandTopic } from "./MQTT/commands";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // import { Picker } from "@react-native-picker/picker";
 
 const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
@@ -70,7 +71,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
     <ScrollView className="grid mr-2">
       <View className="flex-row justify-between items-center w-full py-4 px-6 pr-24">
         <View className="flex-row justify-start items-center w-full">
-          <View className="rounded-lg w-10 h-10 items-center justify-center bg-terciary mr-3">
+          <View className="rounded-lg w-10 h-10 items-center justify-center mr-1">
             {icon}
           </View>
           <Text className="font-bold text-white text-2xl">{title}</Text>
@@ -80,12 +81,14 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
       <View className="flex-grid justify-start pl-6 gap-2">
         <View className="w-[90%] rounded-lg flex flex-row">
           <TouchableOpacity
-            className="bg-terciary w-[80%] p-4 rounded rounded-md mr-1"
+            className="bg-terciary w-[75%] p-4 rounded rounded-md mr-2"
             onPress={()=> showTimePicker()}
           >
+            <View className="flex flex-row items-center gap-2">
+            <MaterialCommunityIcons name="clock-time-two-outline" color={'#40e0d0'} size={20} />
             <Text className="text-[16px] text-white">
               {selectedTime ? String(selectedTime) : "SELECT TIME"}
-            </Text>
+            </Text></View>
           </TouchableOpacity>
           {/* <TouchableOpacity
             className="bg-terciary w-[50%]  p-4 rounded rounded-md"
@@ -107,8 +110,8 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
             className="bg-secondary w-20 p-3 rounded rounded-md justify-center items-center flex-row"
             onPress={handleAddNewSchedule}
           >
-            <Text className="text-[16px] font-bold text-white">
-              Add
+            <Text className="text-[16px] font-bold text-white items-center flex flex-row">
+            <MaterialCommunityIcons name="plus" color={'#fff'} size={20}/> ADD 
             </Text>
           </TouchableOpacity>
           <DateTimePickerModal
@@ -138,14 +141,14 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
           
         </View>
       </View>
-      <ScrollView className="grid w-[100%] gap-2 mt-2 ml-4 overflow-auto max-h-[20vh]">
+      <ScrollView className="grid w-[97%] gap-2 mt-2 ml-4 overflow-auto max-h-[20vh]">
         {scheduleTime?.map((item) => (
           <View
             key={item.id}
-            className="p-3 bg-terciary mr-8 rounded-lg flex flex-row items-center justify-between"
+            className="p-3 bg-terciary mr-6 rounded-lg flex flex-row items-center justify-between"
           >
-            <Text className="text-[14px] text-white">
-              {title} - {item?.time} | Day {item?.date}
+            <Text className="text-[16px] text-white font-semibold">
+              {title} : {item?.time} | Day {item?.date}
             </Text>
             <TouchableOpacity
               className="bg-primary p-2 rounded rounded-full w-9 items-center justify-center"
@@ -153,7 +156,7 @@ const ScheduleRow = ({ title, icon, commandId, publishTopic }) => {
                 handleDeleteSchedule(item?.id);
               }}
             >
-              <Text className="text-[16px] font-bold text-red-200">-</Text>
+              <MaterialCommunityIcons name="close" color={'#fff'} size={20}/>
             </TouchableOpacity>
           </View>
         ))}

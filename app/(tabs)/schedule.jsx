@@ -20,7 +20,7 @@ const Schedule = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#191C4A]">
-      <View className="flex-row items-start p-8 pb-2">
+      <View className="flex-row items-start  p-8 pb-2">
         <Text className="text-white text-2xl">Schedule Configuration</Text>
       </View>
       <View className="items-center">

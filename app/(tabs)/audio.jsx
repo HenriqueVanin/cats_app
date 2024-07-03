@@ -223,7 +223,7 @@ const Audio = () => {
         <CustomButton
           handlePress={handleRecordButtonPress}
           title={`${
-            recordingStatus === "recording" ? `Recording... ${timeLeft &&  timeLeft > 0 && timeLeft} left` : "Record"
+            recordingStatus === "recording" ? ` ■ Recording... ${timeLeft &&  timeLeft > 0 && timeLeft} left` : "● Record"
           }`}
           containerStyles={`flex justify-center w-full bg-terciary p-3 ${recordingStatus === "recording" && 'bg-red-400'}`}
         />

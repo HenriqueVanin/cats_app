@@ -10,6 +10,7 @@ import { commandTopic } from '../components/MQTT/commands';
 //import KinesisWebRTCViewer from '../components/VideoKinesis/KinesisWebRTCViewer';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useAlertStore } from '../components/MQTT/store';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const throttle = (func, delay) => {
     let throttling = false;
@@ -105,7 +106,7 @@ const Control = () => {
             </View>
             <View className="flex-1 w-full px-6">
             <View className="flex-row justify-between mt-1">
-                <CustomButton
+                {/* <CustomButton
                     title={`CAMERA ${streamingState ? 'OFF' : 'ON'}`}
                     isLoading={false}
                     containerStyles={`w-[48%] ${streamingState ?'bg-terciary' : 'bg-secondary'} h-12 mb-2`}
@@ -113,9 +114,19 @@ const Control = () => {
                         {publishTopic(commandTopic.streamingOnOff, !streamingState);
                         setStreamingState(!streamingState);}
                     }
+                /> */}
+                <CustomButton
+                    title="PUMP ON/OFF"
+                    icon={<MaterialCommunityIcons name="water-outline" color={'#40e0d0'} size={20} />}
+                    isLoading={false}
+                    containerStyles={'w-[48%] bg-terciary h-12'}
+                    handlePress={() =>
+                        publishTopic(commandTopic.pumpOnOff, "pump turn on/off")
+                    }
                 />
                 <CustomButton
                     title="LASER ON/OFF"
+                    icon={<MaterialCommunityIcons name="laser-pointer" color={'#40e0d0'} size={20} />}
                     isLoading={false}
                     containerStyles={'w-[48%] bg-terciary h-12'}
                     handlePress={() =>
@@ -125,22 +136,25 @@ const Control = () => {
                 <View className="flex-row justify-between mt-3">
                     <CustomButton
                         title="PLAY SOUND"
+                        icon={<MaterialCommunityIcons name="volume-high" color={'#40e0d0'} size={20} />}
                         isLoading={disableSound}
-                        containerStyles={'w-[30%] bg-terciary h-12'}
+                        containerStyles={'w-[32%] bg-terciary h-12'}
                         textStyles={'text-[12px]'}
                         handlePress={handlePlaySound}
                     />
                     <CustomButton
                         title="THROW BALL"
                         isLoading={disableBallLauncher}
-                        containerStyles={'w-[30%] bg-terciary h-12'}
+                        icon={<MaterialCommunityIcons name="tennis-ball" color={'#40e0d0'} size={20} />}
+                        containerStyles={'w-[32%] bg-terciary h-12'}
                         textStyles={'text-[12px]'}
                         handlePress={handleThrowBall}
                     />
                     <CustomButton
                         title="SERVE SNACK"
                         isLoading={disableSnackDispenser}
-                        containerStyles={'w-[30%] bg-terciary h-12'}
+                        icon={<MaterialCommunityIcons name="food-apple-outline" color={'#40e0d0'} size={20} />}
+                        containerStyles={'w-[32%] bg-terciary h-12'}
                         textStyles={'text-[12px]'}
                         handlePress={handleServeSnack}
                     />

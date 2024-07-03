@@ -1,4 +1,4 @@
-import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
 const CustomButton = ({
   title,
@@ -6,6 +6,7 @@ const CustomButton = ({
   containerStyles,
   textStyles,
   isLoading,
+  icon,
 }) => {
   return (
     <TouchableOpacity
@@ -16,9 +17,12 @@ const CustomButton = ({
       }`}
       disabled={isLoading}
     >
-    <Text className={`text-white font-semibold text-lg ${textStyles}`}>
-      {title}
-    </Text>
+      <View className="mr-1">
+        {icon}
+      </View>
+      <Text className={`text-white font-semibold text-[16px] ${textStyles}`}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };

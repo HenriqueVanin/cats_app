@@ -6,8 +6,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
-    <View className="items-center justify-center gap-2 mt-1">
-      <MaterialCommunityIcons name={icon} color={color} size={35} />
+    <View className="items-center justify-center gap-2">
+      <MaterialCommunityIcons name={icon} color={color} size={30} />
       <Text className={`${focused ? "font-bold" : "font-regular"} text-md`}>
         {name}
       </Text>
@@ -24,9 +24,9 @@ export default function TabsLayout() {
         tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: "#F3F4FF",
-          borderTopWidth: 1,
+          borderTopWidth: 0,
           borderTopColor: "#232533",
-          height: 84,
+          height: 90,
         },
       }}
     >
