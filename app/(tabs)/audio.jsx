@@ -162,10 +162,10 @@ const Audio = () => {
     }
   }
 
-  async function handleDeleteAudio(file) {
+  async function handleDeleteAudio(file, id) {
     FileSystem.deleteAsync(AUDIO_DIR + file);
     getAllFilePathsFromFolder();
-    PublishMessage(commandTopic.soundDel, file);
+    PublishMessage(commandTopic.soundDel, id);
     console.log(file)
   }
 
@@ -205,7 +205,7 @@ const Audio = () => {
     await sound.playAsync();
   }
 
-
+  //() => handleDeleteAudio(audio, index + 6)
   return (
     <SafeAreaView className="flex-1 bg-[#191C4A]">
       <View className="flex-row justify-start p-8">
@@ -217,7 +217,7 @@ const Audio = () => {
       <AudioRow title={"Predefined Sound 4"} play={() => playLocalSound4()}/>
       <AudioRow title={"Predefined Sound 5"} play={() => playLocalSound5()}/>
       {audioFiles?.map((audio, index) => 
-        <AudioRow key={index} title={`Custom Audio ${index + 1}`} excludable={true} play={() => playAudio(audio)} deleteAction={handleDeleteAudio} id={audio}/>
+        <AudioRow key={index} title={`Custom Audio ${index + 1}`} excludable={true} play={() => playAudio(audio)} deleteAction={() => handleDeleteAudio(audio, index + 6)} id={audio}/>
       )}
       <View className="flex-row p-6">
         <CustomButton

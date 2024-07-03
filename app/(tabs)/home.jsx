@@ -53,6 +53,7 @@ const Home = () => {
     return 0;
   }
 
+  // <StatusCard title={"Snacks"} ammount={alertStore?.alertStatus?.snacksLevelAlert} icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />} />
   return (
     <SafeAreaView className="flex-1 justify-start bg-[#191C4A]">
       <View className="flex-row justify-between items-center p-5 pr-2 w-full gap-3">
@@ -71,7 +72,6 @@ const Home = () => {
               <Text className="font-semibold text-white text-lg">Pump On/Off</Text>
             </View>
         </TouchableHighlight>
-        <StatusCard title={"Snacks"} ammount={alertStore?.alertStatus?.snacksLevelAlert} icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />} />
       </View>
       <View className="flex flex-row justify-between mr-8">
         <Text className="p-3 pl-4 mt-0 text-2xl font-semibold text-white">
