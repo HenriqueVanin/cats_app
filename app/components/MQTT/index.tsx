@@ -239,12 +239,12 @@ function useMQTT() {
               let newStatus = alertStore.alertStatus;
               newStatus[eventTopic?.replace("/", "")] = tMsg;
               alertStore.setAlertStatus(newStatus);
-              setCount(count + 1);
+              /*setCount(count + 1);
               create(
                 alertTitle[eventTopic?.replace("/", "")] + tMsg,
                 eventTopic?.replace("/", "")
               );
-              updateAll();
+              updateAll();*/
             }
           }
           if (eventData.message.payload) {
@@ -282,7 +282,7 @@ function useMQTT() {
 
   useEffect(() => {
     testSuccessfulConnection(); //initial execution
-    // PublishMessage("/onOffVideoStreaming", "off");
+    //PublishMessage("/onOffVideoStreaming", "off");
   }, []);
 
   async function CloseConnection() {

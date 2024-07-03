@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
 import useMQTT from '../components/MQTT';
 import { commandTopic } from '../components/MQTT/commands';
-//import KinesisWebRTCViewer from '../components/VideoKinesis/KinesisWebRTCViewer';
+import KinesisWebRTCViewer from '../components/VideoKinesis/KinesisWebRTCViewer';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useAlertStore } from '../components/MQTT/store';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -75,7 +75,7 @@ const Control = () => {
     const handlePlaySound = async () => {
       setDisableSound(true);
       open();
-      await timer(30000);
+      await timer(10000);
       setDisableSound(false);
     }
 
@@ -98,11 +98,11 @@ const Control = () => {
       await timer(30000);
       setDisableSnackDispenser(false);
     }
-//<KinesisWebRTCViewer />
+
     return (
         <SafeAreaView className="flex-1 items-center bg-[#191C4A]">
             <View className="h-[280px] bg-gray-200 m-6 w-full overflow-hidden">
-                
+                <KinesisWebRTCViewer />
             </View>
             <View className="flex-1 w-full px-6">
             <View className="flex-row justify-between mt-1">
@@ -184,33 +184,33 @@ const Control = () => {
                     <Picker.Item
                         key={'p1'}
                         label="Predefined Audio 1"
-                        value="sound_1"
+                        value="1"
                     />
                     <Picker.Item
                         key={'p2'}
                         label="Predefined Audio 2"
-                        value="sound_2"
+                        value="2"
                     />
                     <Picker.Item
                         key={'p3'}
                         label="Predefined Audio 3"
-                        value="sound_3"
+                        value="3"
                     />
                     <Picker.Item
                         key={'p4'}
                         label="Predefined Audio 4"
-                        value="sound_4"
+                        value="4"
                     />
                     <Picker.Item
                         key={'p5'}
                         label="Predefined Audio 5"
-                        value="sound_5"
+                        value="5"
                     />
                     {audioOptions?.map((sound, index) => (
                         <Picker.Item
                             key={index}
                             label={`Custom Audio ${index + 1}`}
-                            value={sound}
+                            value={index + 6}
                         />
                     ))}
                 </Picker>

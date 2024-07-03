@@ -53,6 +53,7 @@ const Home = () => {
     return 0;
   }
 
+  // <StatusCard title={"Snacks"} ammount={alertStore?.alertStatus?.snacksLevelAlert} icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />} />
   return (
     <SafeAreaView className="flex-1 justify-start bg-[#191C4A]">
       <View className="flex-row justify-between items-center p-5 pr-2 w-full gap-3">
