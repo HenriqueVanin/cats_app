@@ -100,8 +100,17 @@ const Control = () => {
     }
 
     return (
-        <SafeAreaView className="flex-1 items-center bg-[#191C4A]">
-            <View className="h-[280px] bg-gray-200 m-6 w-full overflow-hidden">
+        <SafeAreaView className="flex-1 items-center bg-[#121434]">
+            <View className="flex-row justify-between items-center p-5 pr-5 w-full">
+            <Text className="font-bold text-white text-3xl">C.A.T.S.</Text>
+            <TouchableHighlight className="flex-row w-32 rounded-lg justify-center items-center py-1 bg-primary pr-2" onPress={()=>publishTopic(commandTopic.systemOnOff, "system turn on/off")}>
+           <View className="flex flex-row gap-1 items-center">
+            <MaterialCommunityIcons name="power" color={'#880808'} size={20} />
+            <Text className="font-semibold text-white text-lg">Turn Off</Text>
+           </View>
+        </TouchableHighlight>
+           </View>
+            <View className="h-[280px] bg-gray-200 m-6 mt-0 w-full overflow-hidden">
                 <KinesisWebRTCViewer />
             </View>
             <View className="flex-1 w-full px-6">

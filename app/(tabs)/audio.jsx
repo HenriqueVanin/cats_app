@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, TouchableHighlight, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AudioRow from "../components/AudioRow";
 import CustomButton from "../components/CustomButton";
@@ -7,6 +7,9 @@ import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
 import useMQTT from "../components/MQTT";
 import { commandTopic } from "../components/MQTT/commands";
+import { ScrollView } from "react-native-gesture-handler";
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Audio = () => {
   const [recording, setRecording] = useState(null);
@@ -101,6 +104,7 @@ const Audio = () => {
 
       console.log('Starting recording..');
       const { recording } = await AudioDevice.Recording.createAsync(AudioDevice.RecordingOptionsPresets.HIGH_QUALITY);
+      if(audioFiles.length === 10 ) handleDeleteAudio(audioFiles[0], 6)
       
       setRecording(recording);
       setRecordingStatus('recording');
@@ -207,18 +211,30 @@ const Audio = () => {
 
   //() => handleDeleteAudio(audio, index + 6)
   return (
-    <SafeAreaView className="flex-1 bg-[#191C4A]">
-      <View className="flex-row justify-start p-8">
+    <SafeAreaView className="flex-1 bg-[#121434]">
+       <View className="flex-row justify-between items-center p-5 pr-5 w-full">
+            <Text className="font-bold text-white text-3xl">C.A.T.S.</Text>
+            <TouchableHighlight className="flex-row w-32 rounded-lg justify-center items-center py-1 bg-primary pr-2" onPress={()=>publishTopic(commandTopic.systemOnOff, "system turn on/off")}>
+           <View className="flex flex-row gap-1 items-center">
+            <MaterialCommunityIcons name="power" color={'#880808'} size={20} />
+            <Text className="font-semibold text-white text-lg">Turn Off</Text>
+           </View>
+        </TouchableHighlight>
+           </View>
+      <View className="flex-row justify-start p-8 pt-0">
         <Text className="text-2xl text-white">Audio</Text>
-      </View>
-      <AudioRow title={"Predefined Sound 1"} play={() => playLocalSound1()}/>
-      <AudioRow title={"Predefined Sound 2"} play={() => playLocalSound2()}/>
-      <AudioRow title={"Predefined Sound 3"} play={() => playLocalSound3()}/>
-      <AudioRow title={"Predefined Sound 4"} play={() => playLocalSound4()}/>
-      <AudioRow title={"Predefined Sound 5"} play={() => playLocalSound5()}/>
-      {audioFiles?.map((audio, index) => 
-        <AudioRow key={index} title={`Custom Audio ${index + 1}`} excludable={true} play={() => playAudio(audio)} deleteAction={() => handleDeleteAudio(audio, index + 6)} id={audio}/>
-      )}
+      </View>      
+      <ScrollView>
+        <AudioRow title={"Predefined Sound 1"} play={() => playLocalSound1()}/>
+        <AudioRow title={"Predefined Sound 2"} play={() => playLocalSound2()}/>
+        <AudioRow title={"Predefined Sound 3"} play={() => playLocalSound3()}/>
+        <AudioRow title={"Predefined Sound 4"} play={() => playLocalSound4()}/>
+        <AudioRow title={"Predefined Sound 5"} play={() => playLocalSound5()}/>
+        {audioFiles?.map((audio, index) => 
+          <AudioRow key={index} title={`Custom Audio ${index + 1}`} excludable={true} play={() => playAudio(audio)} deleteAction={() => handleDeleteAudio(audio, index + 6)} id={audio}/>
+        )}
+      </ScrollView>
+      {audioFiles.length === 10 && <View className="px-6 text-white flex flex-row items-center justify-center w-full mt-4"><MaterialCommunityIcons name="alert" color={'#880808'} size={16} /><Text className='text-white ml-3'>The next audio you record is going to replace the first one.</Text></View>}
       <View className="flex-row p-6">
         <CustomButton
           handlePress={handleRecordButtonPress}

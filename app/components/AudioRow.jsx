@@ -36,7 +36,7 @@ const AudioRow = ({ title, excludable = false, play, deleteAction, id}) => {
     <View className="flex-row justify-between items-center px-6">
       <View
         className={`flex-row items-center pt-0 w-[72%]
-        justify-start bg-terciary rounded-xl px-2 my-1 py-3 mr-3 h-12`}
+        justify-start border-2 border-[#181B45] rounded-xl px-2 my-1 py-3 mr-3 h-12`}
       >
         <Text className="font-bold text-white ml-3 pr-4">{title}</Text>
       </View>

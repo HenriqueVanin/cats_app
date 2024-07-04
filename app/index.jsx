@@ -11,7 +11,7 @@ globalThis.ReadableStream = ReadableStream;
 
 export default function Welcome() {
     return (
-        <View className="flex-1 items-center justify-center bg-[#191C4A]">
+        <View className="flex-1 items-center justify-center bg-[#121434]">
             <Text className="text-white font-bold text-6xl">C.A.T.S.</Text>
             <Link
                 href={'/home'}

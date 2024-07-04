@@ -55,12 +55,12 @@ const Home = () => {
 
   // <StatusCard title={"Snacks"} ammount={alertStore?.alertStatus?.snacksLevelAlert} icon={<MaterialCommunityIcons name="food-apple-outline" color={'#fff'} size={25} />} />
   return (
-    <SafeAreaView className="flex-1 justify-start bg-[#191C4A]">
+    <SafeAreaView className="flex-1 justify-start bg-[#121434]">
       <View className="flex-row justify-between items-center p-5 pr-2 w-full gap-3">
       <Text className="font-bold text-white text-3xl">C.A.T.S.</Text>
-      <TouchableHighlight className="flex-row w-[40%] rounded-lg justify-center items-center py-1 bg-terciary ml-2" onPress={()=>publishTopic(commandTopic.systemOnOff, "system turn on/off")}>
-           <View className="flex flex-row gap-2 items-center">
-            <MaterialCommunityIcons name="power" color={'#40e0d0'} size={20} className="mr-3" />
+      <TouchableHighlight className="flex-row w-32 rounded-lg justify-center items-center py-1 bg-primary pr-2" onPress={()=>publishTopic(commandTopic.systemOnOff, "system turn on/off")}>
+           <View className="flex flex-row gap-1 items-center">
+            <MaterialCommunityIcons name="power" color={'#880808'} size={20} />
             <Text className="font-semibold text-white text-lg">Turn Off</Text>
            </View>
         </TouchableHighlight></View>
@@ -72,7 +72,7 @@ const Home = () => {
         <Text className="p-3 pl-4 mt-0 text-2xl font-semibold text-white">
           Recent Activities
         </Text>
-        <CustomButton title="Clear" handlePress={clearTable}/>
+        <TouchableHighlight className="m-3 rounded-lg justify-center items-center" handlePress={clearTable}><Text className="text-xl text-white font-semibold ">Clear</Text></TouchableHighlight>
       </View>
       <ScrollView className="flex-1 w-full">
         {alertStore.activities.sort(recentActivity).filter((item) => item.title).map((activity) => (
